@@ -40,9 +40,27 @@ npm run build
 Gera os ficheiros estaticos em `dist/`. Com `dist/` gerado, `npm run electron`
 carrega a build em vez do dev server (ver `main.cjs`, controlado por `app.isPackaged`).
 
+## Gerar um instalavel para Windows
+
+```bash
+npm run dist:win
+```
+
+Isto corre `vite build` e depois o `electron-builder`, e deixa o resultado em
+`release/`:
+
+- `release/win-unpacked/` — a app pronta a correr (`Farm Player.exe`)
+- `release/Farm Player-<versao>-win.zip` — o mesmo conteudo em zip, para
+  partilhar. Quem recebe so precisa de extrair o zip e abrir `Farm Player.exe`,
+  sem instalar nada.
+
+Nota: os `.mp3` vao dentro do pacote, por isso este zip fica grande (o
+tamanho da pasta `public/assets/audio/` mais a app Electron em si, uns
+100-150MB tipicamente).
+
 ## Adicionar musicas
 
-1. Coloca os ficheiros `.mp3` dentro de `assets/audio/`.
+1. Coloca os ficheiros `.mp3` dentro de `public/assets/audio/`.
 2. Edita `src/playlist.js` e acrescenta uma entrada por musica:
 
    ```js
@@ -75,15 +93,15 @@ do CSS — nao parte nada nao teres gerado os blocos ainda.
 3. Corre:
 
    ```bash
-   python scripts/generate_block.py covers/ assets/images/blocks/
+   python scripts/generate_block.py covers/ public/assets/images/blocks/
    ```
 
-Isto gera um `.png` por capa dentro de `assets/images/blocks/`, exatamente
+Isto gera um `.png` por capa dentro de `public/assets/images/blocks/`, exatamente
 onde o `playlist.js` (campo `block`) espera encontrar.
 
 ## Onde trocar cada imagem
 
-Todas as imagens vivem em `assets/images/`. Enquanto um ficheiro nao existir, o
+Todas as imagens vivem em `public/assets/images/`. Enquanto um ficheiro nao existir, o
 CSS (`src/style.css`) mostra um placeholder desenhado so com CSS (cores/gradientes
 que seguem a paleta farm/blocky). Assim que colocares um ficheiro com o **mesmo
 nome** na pasta, ele passa a aparecer automaticamente por cima do placeholder —
@@ -128,8 +146,9 @@ farm-player/
 ├── scripts/
 │   └── generate_block.py   # gera as capas em bloco a partir de covers/
 ├── covers/                 # (opcional) capas de album originais, input do script acima
-└── assets/
-    ├── images/
-    │   └── blocks/          # capas em bloco geradas (output do script acima)
-    └── audio/                # ficheiros .mp3
+└── public/                 # tudo aqui e copiado tal-e-qual para dist/ no build
+    └── assets/
+        ├── images/
+        │   └── blocks/      # capas em bloco geradas (output do script acima)
+        └── audio/            # ficheiros .mp3
 ```
