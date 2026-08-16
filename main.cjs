@@ -4,8 +4,8 @@ const path = require("node:path");
 const isDev = !app.isPackaged;
 const DEV_SERVER_URL = "http://localhost:5173";
 
-const WINDOW_WIDTH = 380;
-const WINDOW_HEIGHT = 260;
+const WINDOW_WIDTH = 420;
+const WINDOW_HEIGHT = 330;
 
 let mainWindow = null;
 
