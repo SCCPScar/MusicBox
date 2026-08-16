@@ -4,8 +4,3 @@ dist-electron/
 .DS_Store
 *.log
 npm-debug.log*
-
-# Ficheiros de audio grandes nao devem ir para o git por defeito.
-# Remove esta linha se quiseres versionar as tuas musicas.
-assets/audio/*
-!assets/audio/.gitkeep

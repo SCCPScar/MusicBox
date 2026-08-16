@@ -1,6 +1,7 @@
 import { playlist } from "./playlist.js";
 
 const audio = document.getElementById("audio-player");
+const albumArtEl = document.querySelector(".album-art");
 const trackTitleEl = document.getElementById("track-title");
 const trackArtistEl = document.getElementById("track-artist");
 const progressBar = document.getElementById("progress-bar");
@@ -31,6 +32,7 @@ function loadTrack(index) {
     trackTitleEl.textContent = "Nenhuma musica adicionada";
     trackArtistEl.textContent = "";
     audio.removeAttribute("src");
+    albumArtEl.style.backgroundImage = "";
     return;
   }
 
@@ -38,6 +40,12 @@ function loadTrack(index) {
   trackTitleEl.textContent = track.title;
   trackArtistEl.textContent = track.artist;
   audio.src = track.file;
+
+  // Camada de cima = bloco da faixa (gerado por scripts/generate_block.py).
+  // Enquanto esse ficheiro nao existir, cai para o placeholder/gradiente do CSS.
+  albumArtEl.style.backgroundImage = track.block
+    ? `url("${track.block}"), var(--album-fallback)`
+    : "";
 }
 
 function updatePlayPauseIcon() {

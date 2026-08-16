@@ -47,12 +47,39 @@ carrega a build em vez do dev server (ver `main.cjs`, controlado por `app.isPack
 
    ```js
    export const playlist = [
-     { title: "Nome da musica", artist: "Nome do artista", file: "assets/audio/nome-do-ficheiro.mp3" },
+     {
+       id: "nome-do-ficheiro",
+       title: "Nome da musica",
+       artist: "Nome do artista",
+       file: "assets/audio/nome-do-ficheiro.mp3",
+       block: "assets/images/blocks/nome-do-ficheiro.png",
+     },
    ];
    ```
 
 Enquanto o array estiver vazio, a interface mostra "Nenhuma musica adicionada"
 no lugar do "now playing".
+
+O campo `block` e opcional: se o ficheiro ainda nao existir em
+`assets/images/blocks/`, a capa cai automaticamente para o placeholder/gradiente
+do CSS — nao parte nada nao teres gerado os blocos ainda.
+
+## Gerar as capas em bloco (estilo Minecraft)
+
+`scripts/generate_block.py` transforma uma capa de album normal num "bloco"
+3D isometrico (topo claro, laterais em sombra) a condizer com o tema.
+
+1. Instala a dependencia (uma vez so): `pip install pillow`
+2. Guarda as capas em `covers/`, com o nome **igual ao `id`** da faixa em
+   `src/playlist.js` (ex: `covers/anavitoria-ai-amor.jpg`)
+3. Corre:
+
+   ```bash
+   python scripts/generate_block.py covers/ assets/images/blocks/
+   ```
+
+Isto gera um `.png` por capa dentro de `assets/images/blocks/`, exatamente
+onde o `playlist.js` (campo `block`) espera encontrar.
 
 ## Onde trocar cada imagem
 
@@ -91,14 +118,18 @@ nome** na pasta, ele passa a aparecer automaticamente por cima do placeholder �
 
 ```
 farm-player/
-├── main.cjs           # processo principal do Electron
-├── preload.cjs         # ponte segura (contextBridge) para a interface
+├── main.cjs             # processo principal do Electron
+├── preload.cjs           # ponte segura (contextBridge) para a interface
 ├── index.html
 ├── src/
-│   ├── app.js           # logica do player (audio, controlos, progresso)
-│   ├── playlist.js       # array de musicas
-│   └── style.css         # tema visual farm/blocky
+│   ├── app.js             # logica do player (audio, controlos, progresso)
+│   ├── playlist.js         # array de musicas
+│   └── style.css           # tema visual farm/blocky
+├── scripts/
+│   └── generate_block.py   # gera as capas em bloco a partir de covers/
+├── covers/                 # (opcional) capas de album originais, input do script acima
 └── assets/
-    ├── images/           # imagens (ver tabela acima)
-    └── audio/             # ficheiros .mp3
+    ├── images/
+    │   └── blocks/          # capas em bloco geradas (output do script acima)
+    └── audio/                # ficheiros .mp3
 ```
