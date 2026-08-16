@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 /*
-  Farm Player - tema Farm/Blocky (Stardew Valley + Minecraft) com lirios.
+  Farm Player - tema Cherry Blossom + Minecraft (bioma cherry grove).
 
   Todas as imagens em assets/images/ foram desenhadas a pixel (canvas +
   Chromium, sem gradientes CSS a fingir textura). Continuam a ser
@@ -10,7 +10,7 @@
   assets/images/ com o MESMO NOME e pronto, nao precisas de tocar aqui.
 
   Mapa de ficheiros:
-    frame.png                 -> tile de madeira repetido na moldura
+    frame.png                 -> tile de madeira de cerejeira repetido na moldura
     window_button_close.png   -> botao fechar (20x20)
     window_button_min.png     -> botao minimizar (20x20)
     button_prev.png            -> botao faixa anterior (32x32)
@@ -19,32 +19,28 @@
     button_next.png            -> botao proxima faixa (32x32)
     progress_bar_bg.png       -> tile do fundo da barra de progresso (8x8)
     progress_bar_fill.png     -> tile do preenchimento da barra (8x8)
-    lily_icon.png              -> icone de lirio (titlebar, cantos, marcador)
-    album_placeholder.png     -> ilustracao central (janela + radio + lirio)
+    lily_icon.png              -> flor de cerejeira (titlebar, cantos, marcador)
+    petal.png                  -> petala solta, usada na animacao a cair
+    album_placeholder.png     -> ilustracao central (arvore de cerejeira + radio)
 */
 
 :root {
-  --color-moss-dark: #3f5f3a;
-  --color-moss: #5c8a52;
-  --color-moss-light: #8fbf7a;
-  --color-wood-dark: #5b3a22;
-  --color-wood: #7a5230;
-  --color-wood-light: #9c6c40;
+  --color-moss-dark: #4a8a3a;
+  --color-moss: #7cb342;
+  --color-moss-light: #a3d477;
+  --color-wood-dark: #5c2e38;
+  --color-wood: #a15c66;
+  --color-wood-light: #e8b4ba;
   --color-cream: #f3e9d2;
   --color-cream-dark: #e2d3ac;
-  --color-lily-white: #fffaf0;
-  --color-lily-yellow: #f5e08a;
-  --color-blush: #f2b3ae;
-  --color-xp-bar-bg: #2b2b2b;
-  --color-xp-bar-fill: #6fcf3f;
   --color-text: #3a2a17;
 
   /* Camada de baixo do album-art: aparece se a imagem de cima (placeholder
      ou bloco de uma faixa) nao existir. */
   --album-fallback: linear-gradient(
     to bottom,
-    #ffcf6b 0%,
-    #ffcf6b 40%,
+    #ffd9e6 0%,
+    #ffd9e6 40%,
     var(--color-moss-light) 42%,
     var(--color-moss) 70%,
     var(--color-moss-dark) 100%
@@ -93,7 +89,7 @@ body {
     0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
-/* Lirios a "crescer" nos 4 cantos da moldura */
+/* Flores de cerejeira nos 4 cantos da moldura */
 .frame::before,
 .frame::after,
 .player-body::before,
@@ -355,4 +351,71 @@ body {
 
 .control-btn-pause {
   background-image: url("../assets/images/button_pause.png");
+}
+
+/* ---------- Petalas de cerejeira a cair (decorativo) ---------- */
+
+.petal {
+  position: absolute;
+  top: -12px;
+  width: 9px;
+  height: 9px;
+  background-image: url("../assets/images/petal.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  animation: petal-fall linear infinite;
+}
+
+.petal-1 {
+  left: 12%;
+  animation-duration: 8s;
+  animation-delay: 0s;
+}
+
+.petal-2 {
+  left: 30%;
+  animation-duration: 10s;
+  animation-delay: 2s;
+}
+
+.petal-3 {
+  left: 50%;
+  animation-duration: 7s;
+  animation-delay: 4s;
+}
+
+.petal-4 {
+  left: 68%;
+  animation-duration: 11s;
+  animation-delay: 1s;
+}
+
+.petal-5 {
+  left: 86%;
+  animation-duration: 9s;
+  animation-delay: 5s;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate(14px, 165px) rotate(180deg);
+  }
+  92% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-10px, 340px) rotate(360deg);
+    opacity: 0;
+  }
 }
