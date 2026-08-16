@@ -44,6 +44,17 @@
   --color-xp-bar-fill: #6fcf3f;
   --color-text: #3a2a17;
 
+  /* Gradiente usado como camada de baixo do album-art: aparece sempre que a
+     imagem de cima (placeholder ou bloco de uma faixa) ainda nao existe. */
+  --album-fallback: linear-gradient(
+    to bottom,
+    #ffcf6b 0%,
+    #ffcf6b 40%,
+    var(--color-moss-light) 42%,
+    var(--color-moss) 70%,
+    var(--color-moss-dark) 100%
+  );
+
   --pixel-border: 4px;
   --font-pixel: "Press Start 2P", "Courier New", monospace;
 }
@@ -235,15 +246,9 @@ body {
 .album-art {
   width: 96px;
   height: 96px;
-  background-image: url("../assets/images/album_placeholder.png"),
-    linear-gradient(
-      to bottom,
-      #ffcf6b 0%,
-      #ffcf6b 40%,
-      var(--color-moss-light) 42%,
-      var(--color-moss) 70%,
-      var(--color-moss-dark) 100%
-    );
+  /* Estado por omissao (sem faixa a tocar). app.js troca este background-image
+     por url(track.block) + var(--album-fallback) quando uma faixa carrega. */
+  background-image: url("../assets/images/album_placeholder.png"), var(--album-fallback);
   background-size: cover;
   background-position: center;
   border: 3px solid var(--color-wood-dark);
