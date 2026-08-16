@@ -1,0 +1,430 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+/*
+  Farm Player - tema Farm/Blocky (Stardew Valley + Minecraft) com lirios.
+
+  Como trocar os assets:
+  Cada elemento visual abaixo carrega uma imagem de assets/images/ como a
+  CAMADA DE CIMA do "background", com uma cor/gradiente CSS por baixo como
+  placeholder. Enquanto o ficheiro nao existir, o browser ignora essa camada
+  e mostra o placeholder CSS. Assim que colocares um ficheiro com o MESMO
+  NOME em assets/images/, ele aparece automaticamente por cima do placeholder,
+  sem precisares de tocar neste ficheiro.
+
+  Mapa de ficheiros esperados (ver README.md para mais detalhe):
+    frame.png                 -> moldura exterior da janela
+    window_button_close.png   -> botao fechar
+    window_button_min.png     -> botao minimizar
+    window_button_max.png     -> botao maximizar (nao usado ainda)
+    button_prev.png           -> botao faixa anterior
+    button_play.png           -> botao play
+    button_pause.png          -> botao pause
+    button_next.png           -> botao proxima faixa
+    progress_bar_bg.png       -> fundo da barra de progresso
+    progress_bar_fill.png     -> preenchimento da barra de progresso
+    lily_icon.png             -> icone de lirio (titlebar + marcador da barra)
+    album_placeholder.png     -> capa/ilustracao central
+*/
+
+:root {
+  --color-moss-dark: #3f5f3a;
+  --color-moss: #5c8a52;
+  --color-moss-light: #8fbf7a;
+  --color-wood-dark: #5b3a22;
+  --color-wood: #7a5230;
+  --color-wood-light: #9c6c40;
+  --color-cream: #f3e9d2;
+  --color-cream-dark: #e2d3ac;
+  --color-lily-white: #fffaf0;
+  --color-lily-yellow: #f5e08a;
+  --color-slot-bg: #6b6b6b;
+  --color-slot-border-dark: #2b2b2b;
+  --color-slot-border-light: #b8b8b8;
+  --color-xp-bar-bg: #2b2b2b;
+  --color-xp-bar-fill: #6fcf3f;
+  --color-text: #3a2a17;
+
+  --pixel-border: 4px;
+  --font-pixel: "Press Start 2P", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font-pixel);
+  color: var(--color-text);
+}
+
+/* ---------- Moldura exterior ---------- */
+
+.frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 2px;
+
+  background-image: url("../assets/images/frame.png"),
+    repeating-linear-gradient(
+      90deg,
+      var(--color-wood) 0px,
+      var(--color-wood) 18px,
+      var(--color-wood-dark) 18px,
+      var(--color-wood-dark) 20px
+    );
+  background-size: cover, auto;
+  border: var(--pixel-border) solid var(--color-wood-dark);
+  box-shadow:
+    inset 0 0 0 3px var(--color-wood-light),
+    0 6px 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Lirios decorativos nos cantos, ate haver arte final em frame.png */
+.frame::before,
+.frame::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: radial-gradient(
+      circle at 50% 50%,
+      var(--color-lily-white) 0%,
+      var(--color-lily-white) 40%,
+      var(--color-lily-yellow) 45%,
+      transparent 46%
+    ),
+    radial-gradient(circle at 50% 20%, var(--color-lily-white) 0 30%, transparent 31%),
+    radial-gradient(circle at 20% 60%, var(--color-lily-white) 0 30%, transparent 31%),
+    radial-gradient(circle at 80% 60%, var(--color-lily-white) 0 30%, transparent 31%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.frame::before {
+  top: -6px;
+  left: -6px;
+}
+
+.frame::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+/* ---------- Titlebar (area arrastavel) ---------- */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 0 6px;
+  margin-bottom: 8px;
+  background: var(--color-wood-dark);
+  border: 2px solid var(--color-slot-border-dark);
+  -webkit-app-region: drag;
+}
+
+.titlebar-drag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  -webkit-app-region: drag;
+}
+
+.titlebar-lily {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  background-image: url("../assets/images/lily_icon.png"),
+    radial-gradient(circle, var(--color-lily-white) 0%, var(--color-lily-yellow) 70%, transparent 71%);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.titlebar-label {
+  font-size: 8px;
+  color: var(--color-cream);
+  letter-spacing: 0.5px;
+}
+
+.titlebar-buttons {
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.window-btn {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  cursor: pointer;
+  border: 2px solid var(--color-slot-border-dark);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.35), inset 2px 2px 0 rgba(255, 255, 255, 0.2);
+  background-color: var(--color-slot-bg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px 10px;
+  position: relative;
+}
+
+.window-btn:active {
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.window-btn-min {
+  background-image: url("../assets/images/window_button_min.png");
+}
+
+.window-btn-min::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 4px;
+  height: 2px;
+  background: var(--color-cream);
+}
+
+.window-btn-close {
+  background-image: url("../assets/images/window_button_close.png");
+}
+
+.window-btn-close::before,
+.window-btn-close::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 6px;
+  height: 2px;
+  background: #d9534f;
+}
+
+.window-btn-close::before {
+  transform: rotate(45deg);
+}
+
+.window-btn-close::after {
+  transform: rotate(-45deg);
+}
+
+/* ---------- Corpo do player ---------- */
+
+.player-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 8px;
+}
+
+.album-art {
+  width: 96px;
+  height: 96px;
+  background-image: url("../assets/images/album_placeholder.png"),
+    linear-gradient(
+      to bottom,
+      #ffcf6b 0%,
+      #ffcf6b 40%,
+      var(--color-moss-light) 42%,
+      var(--color-moss) 70%,
+      var(--color-moss-dark) 100%
+    );
+  background-size: cover;
+  background-position: center;
+  border: 3px solid var(--color-wood-dark);
+  box-shadow: inset 0 0 0 3px var(--color-cream-dark);
+  image-rendering: pixelated;
+}
+
+.now-playing {
+  width: 100%;
+  text-align: center;
+  background: var(--color-cream);
+  border: 2px solid var(--color-wood-dark);
+  padding: 6px 8px;
+  min-height: 34px;
+}
+
+.track-title {
+  margin: 0 0 4px;
+  font-size: 8px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  margin: 0;
+  font-size: 7px;
+  color: var(--color-wood);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Barra de progresso (estilo XP bar) ---------- */
+
+.progress-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-label {
+  font-size: 7px;
+  color: var(--color-cream);
+  min-width: 26px;
+  text-align: center;
+}
+
+.progress-bar {
+  position: relative;
+  flex: 1;
+  height: 12px;
+  cursor: pointer;
+  background-image: url("../assets/images/progress_bar_bg.png");
+  background-size: cover;
+  background-color: var(--color-xp-bar-bg);
+  border: 2px solid var(--color-slot-border-dark);
+  box-shadow: inset 0 0 0 1px var(--color-slot-border-light);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background-image: url("../assets/images/progress_bar_fill.png");
+  background-size: cover;
+  background-color: var(--color-xp-bar-fill);
+  transition: width 0.1s linear;
+}
+
+.progress-bar-marker {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  background-image: url("../assets/images/lily_icon.png"),
+    radial-gradient(circle, var(--color-lily-white) 0%, var(--color-lily-yellow) 70%, transparent 71%);
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* ---------- Controlos (slots estilo inventario) ---------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  background-color: var(--color-slot-bg);
+  border: 3px solid var(--color-slot-border-dark);
+  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.4), inset 3px 3px 0 rgba(255, 255, 255, 0.25);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.control-btn:active {
+  box-shadow: inset 3px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.control-btn-prev {
+  background-image: url("../assets/images/button_prev.png");
+}
+
+.control-btn-prev::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-right: 10px solid var(--color-cream);
+}
+
+.control-btn-next {
+  background-image: url("../assets/images/button_next.png");
+}
+
+.control-btn-next::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 10px solid var(--color-cream);
+}
+
+.control-btn-play {
+  background-image: url("../assets/images/button_play.png");
+}
+
+.control-btn-play::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-45%, -50%);
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 12px solid var(--color-cream);
+}
+
+.control-btn-pause {
+  background-image: url("../assets/images/button_pause.png");
+}
+
+.control-btn-pause::before,
+.control-btn-pause::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 14px;
+  transform: translateY(-50%);
+  background: var(--color-cream);
+}
+
+.control-btn-pause::before {
+  left: 11px;
+}
+
+.control-btn-pause::after {
+  right: 11px;
+}

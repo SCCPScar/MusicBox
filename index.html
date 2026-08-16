@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farm Player</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div class="frame">
+      <!-- Barra de titulo: area arrastavel da janela -->
+      <div class="titlebar">
+        <div class="titlebar-drag">
+          <span class="titlebar-lily" aria-hidden="true"></span>
+          <span class="titlebar-label">Farm Player</span>
+        </div>
+        <div class="titlebar-buttons">
+          <button id="btn-minimize" class="window-btn window-btn-min" title="Minimizar" aria-label="Minimizar"></button>
+          <button id="btn-close" class="window-btn window-btn-close" title="Fechar" aria-label="Fechar"></button>
+        </div>
+      </div>
+
+      <div class="player-body">
+        <div class="album-art" role="img" aria-label="Capa do album"></div>
+
+        <div class="now-playing">
+          <p id="track-title" class="track-title">Nenhuma musica adicionada</p>
+          <p id="track-artist" class="track-artist">&nbsp;</p>
+        </div>
+
+        <div class="progress-section">
+          <span id="time-current" class="time-label">0:00</span>
+          <div id="progress-bar" class="progress-bar">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            <div id="progress-bar-marker" class="progress-bar-marker"></div>
+          </div>
+          <span id="time-duration" class="time-label">0:00</span>
+        </div>
+
+        <div class="controls">
+          <button id="btn-prev" class="control-btn control-btn-prev" title="Faixa anterior" aria-label="Faixa anterior"></button>
+          <button id="btn-play-pause" class="control-btn control-btn-play" title="Reproduzir" aria-label="Reproduzir"></button>
+          <button id="btn-next" class="control-btn control-btn-next" title="Proxima faixa" aria-label="Proxima faixa"></button>
+        </div>
+      </div>
+    </div>
+
+    <audio id="audio-player"></audio>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
